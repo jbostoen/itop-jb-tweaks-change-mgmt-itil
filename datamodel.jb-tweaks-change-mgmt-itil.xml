@@ -2,6 +2,21 @@
 <itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.6">
 	<classes>
 		<class id="NormalChange">
+			<fields>
+				<!-- Add third party org and ref -->
+				<field id="third_party_org_id" xsi:type="AttributeExternalKey" _delta="define">
+					<sql>third_party_org_id</sql>
+					<default_value/>
+					<is_null_allowed>true</is_null_allowed>
+					<on_target_delete>DEL_AUTO</on_target_delete>
+					<target_class>Organization</target_class>
+				</field>
+				<field id="third_party_ref" xsi:type="AttributeString" _delta="define">
+					<sql>third_party_ref</sql>
+					<default_value/>
+					<is_null_allowed>true</is_null_allowed>
+				</field>
+			</fields>
 			<lifecycle>
 				<states>
 					<state id="validated">
@@ -49,6 +64,12 @@
 						</transitions>
 					</state>
 					<state id="approved">
+						<flags>
+							<!-- Necessary to explicitly define for PrefillTransitionForm? -->
+							<attribute id="approval_date">
+								<must_prompt _delta="define"/>
+							</attribute>
+						</flags>
 						<transitions>
 							<!-- Allow transition to 'reject' even when already approved -->
 							<transition id="ev_reject" _delta="define">
@@ -92,9 +113,21 @@
 							<rank>100</rank>
 							<items>
 								<item id="fieldset:Ticket:date">
+									<rank>130</rank>
 									<items>
 										<item id="reminder" _delta="define">
 											<rank>80</rank>
+										</item>
+									</items>
+								</item>
+								<item id="fieldset:NormalChange:ThirdParty" _delta="define">
+									<rank>140</rank>
+									<items>
+										<item id="third_party_org_id">
+											<rank>1</rank>
+										</item>
+										<item id="third_party_ref">
+											<rank>11</rank>
 										</item>
 									</items>
 								</item>
@@ -225,6 +258,15 @@
 							</attribute>
 						</flags>
 					</state>
+					<state id="approved">
+						<flags>
+							<!-- Prevent Change's approval_comment from being mandatory -->
+							<attribute id="approval_comment">
+								<mandatory _delta="delete"/>
+								<must_prompt _delta="define">true</must_prompt>
+							</attribute>
+						</flags>
+					</state>
 					<state id="implemented">
 						<flags>
 							<!-- Prevent EmergencyChange's title becoming read-only when the state changes to implemented. -->
@@ -243,34 +285,6 @@
 					</state>
 				</states>
 			</lifecycle>
-			<methods>
-				<method id="PrefillTransitionForm" _delta="define">
-					<!-- Set approval date to today by default -->
-					<static>false</static>
-					<access>public</access>
-					<type>Overload-DBObject</type>
-					<arguments>
-						<argument id="1">
-							<type>reference</type>
-							<mandatory>true</mandatory>
-						</argument>
-					</arguments>
-					<code>
-						<![CDATA[
-						public function PrefillTransitionForm(&$aContextParam) {
-						
-							parent::PrefillTransitionForm($aContextParam);
-							
-							if($aContextParam['stimulus'] == 'ev_approve') {
-								$this->Set('approval_date', date('Y-m-d H:i:s'));
-							}
-						
-						}
-						
-						]]>
-					</code>
-				</method>
-			</methods>
 		</class>
 		<class id="Change">
 			<fields>
@@ -345,6 +359,15 @@
 							<!-- Prevent Change's fallback from being mandatory -->
 							<attribute id="fallback">
 								<mandatory _delta="delete"/>
+							</attribute>
+						</flags>
+					</state>
+					<state id="approved">
+						<flags>
+							<!-- Prevent Change's approval_comment from being mandatory -->
+							<attribute id="approval_comment">
+								<mandatory _delta="delete"/>
+								<must_prompt _delta="define">true</must_prompt>
 							</attribute>
 						</flags>
 					</state>

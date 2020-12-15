@@ -11,6 +11,10 @@ Dict::Add('EN US', 'English', 'English', array(
 
 	'Class:Change/Attribute:reminder' => 'Reminder',
 	
+	'Class:NormalChange/Attribute:third_party_org_id' => 'Third party org',
+	'Class:NormalChange/Attribute:third_party_ref' => 'Their ref',
+	'NormalChange:ThirdParty' => 'Third party',
+	
 ));
 
 
