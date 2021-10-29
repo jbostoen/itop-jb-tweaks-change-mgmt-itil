@@ -1,5 +1,15 @@
 # jb-tweaks-change-mgmt-itil
 
+Copyright (C) 2019-2021 Jeffrey Bostoen
+
+[![License](https://img.shields.io/github/license/jbostoen/iTop-custom-extensions)](https://github.com/jbostoen/iTop-custom-extensions/blob/master/license.md)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/jbostoen)
+🍻 ☕
+
+Need assistance with iTop or one of its extensions?  
+Need custom development?  
+Please get in touch to discuss the terms: **info@jeffreybostoen.be** / https://jeffreybostoen.be
+
 ## What?
 
 Modifies Change:
@@ -25,7 +35,3 @@ XML
 * change default value for field
 * override a method
 * override a property
-
-## License
-https://www.gnu.org/licenses/gpl-3.0.en.html
-Copyright (C) 2019-2020 Jeffrey Bostoen
